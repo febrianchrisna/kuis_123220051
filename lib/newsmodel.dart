@@ -39,7 +39,7 @@ List<NewsModel> dummyNews = [
   NewsModel(
     id: '4',
     title: 'Perkembangan Vaksin COVID-19',
-    image: 'https://pi  csum.photos/800/403',
+    image: 'https://picsum.photos/800/403',
     description: 'Tim peneliti internasional mengumumkan keberhasilan uji klinis tahap akhir vaksin COVID-19 generasi baru yang lebih efektif terhadap varian baru.',
     likes: 320,
   ),
