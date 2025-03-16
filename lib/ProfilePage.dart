@@ -29,26 +29,6 @@ class ProfilePage extends StatelessWidget {
               style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 13),
-            ElevatedButton.icon(
-              onPressed: () {
-                // Log out by returning to login page
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => const LoginPage()),
-                      (route) => false,
-                );
-              },
-              icon: const Icon(Icons.logout, color: Colors.white,),
-              label: const Text('Logout'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red,
-                foregroundColor: Colors.white,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
-                ),
-              ),
-            ),
           ],
         ),
       ),

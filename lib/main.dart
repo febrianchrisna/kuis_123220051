@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'LoginPage.dart';
-import 'HomePage.dart';
-import 'ProfilePage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,7 +14,6 @@ class MyApp extends StatelessWidget {
       title: 'News App',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-
       ),
       home: const LoginPage(),
     );

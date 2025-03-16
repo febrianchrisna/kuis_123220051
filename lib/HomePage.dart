@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'newsmodel.dart';
 import 'DetailPage.dart';
 import 'ProfilePage.dart';
+import 'LoginPage.dart';
 
 class HomePage extends StatelessWidget {
   final String username;
@@ -26,6 +27,17 @@ class HomePage extends StatelessWidget {
                 ),
               );
             },
+          ),
+          IconButton(
+            onPressed: () {
+              // Log out by returning to login page
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => const LoginPage()),
+                    (route) => false,
+              );
+            },
+            icon: const Icon(Icons.logout, color: Colors.white,),
           ),
         ],
       ),
