@@ -41,10 +41,9 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             onPressed: () {
               // Log out by returning to login page
-              Navigator.pushAndRemoveUntil(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                    (route) => false,
+                MaterialPageRoute(builder: (context) => const LoginPage())
               );
             },
             icon: const Icon(Icons.logout, color: Colors.white),
