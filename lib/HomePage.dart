@@ -4,17 +4,27 @@ import 'DetailPage.dart';
 import 'ProfilePage.dart';
 import 'LoginPage.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String username;
 
   const HomePage({super.key, required this.username});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  // Force refresh when coming back from detail page
+  void _refreshState() {
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('News App'),
-        backgroundColor: Colors.green,
+        title: const Text('News Feed'),
+        backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -23,7 +33,7 @@ class HomePage extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfilePage(username: username),
+                  builder: (context) => ProfilePage(username: widget.username),
                 ),
               );
             },
@@ -37,104 +47,93 @@ class HomePage extends StatelessWidget {
                     (route) => false,
               );
             },
-            icon: const Icon(Icons.logout, color: Colors.white,),
+            icon: const Icon(Icons.logout, color: Colors.white),
           ),
         ],
       ),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: dummyNews.length,
-        itemBuilder: (context, index) {
-          final news = dummyNews[index];
-          return NewsCard(news: news, username: username);
-        },
-      ),
+      body: _buildNewsList(),
     );
   }
-}
 
-class NewsCard extends StatelessWidget {
-  final NewsModel news;
-  final String username;
-
-  const NewsCard({super.key, required this.news, required this.username});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      elevation: 4,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DetailPage(news: news, username: username),
-            ),
-          );
-        },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(12),
-              ),
-              child: Image.network(
-                news.image,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    height: 200,
-                    color: Colors.grey[300],
-                    child: const Center(child: CircularProgressIndicator()),
-                  );
-                },
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: 200,
-                    color: Colors.grey[300],
-                    child: const Icon(Icons.error),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    news.title,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+  Widget _buildNewsList() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(8),
+      itemCount: dummyNews.length,
+      itemBuilder: (context, index) {
+        final news = dummyNews[index];
+        return Card(
+          elevation: 3,
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          child: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) => DetailPage(
+                    news: news,
+                    username: widget.username,
+                    onLikeUpdated: _refreshState,
                   ),
-                  const SizedBox(height: 8),
-                  Row(
+                ),
+              );
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(4),
+                  ),
+                  child: Image.network(
+                    news.image,
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                    errorBuilder:
+                        (context, error, stackTrace) => Container(
+                      height: 200,
+                      width: double.infinity,
+                      color: Colors.grey[300],
+                      child: const Icon(
+                        Icons.image_not_supported,
+                        size: 50,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Icon(Icons.favorite, color: Colors.grey, size: 20),
-                      const SizedBox(width: 4),
                       Text(
-                        '${news.likes} likes',
-                        style: const TextStyle(color: Colors.grey),
+                        news.title,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.favorite,
+                            color: Colors.grey,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 4),
+                          Text('${news.likes} likes'),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

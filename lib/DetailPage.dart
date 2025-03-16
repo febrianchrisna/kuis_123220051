@@ -4,8 +4,14 @@ import 'newsmodel.dart';
 class DetailPage extends StatefulWidget {
   final NewsModel news;
   final String username;
+  final Function onLikeUpdated;
 
-  const DetailPage({super.key, required this.news, required this.username});
+  const DetailPage({
+    super.key,
+    required this.news,
+    required this.username,
+    required this.onLikeUpdated,
+  });
 
   @override
   State<DetailPage> createState() => _DetailPageState();
@@ -16,12 +22,14 @@ class _DetailPageState extends State<DetailPage> {
 
   void _toggleLike() {
     setState(() {
-      if (_isLiked) {
-        widget.news.likes--;
-      } else {
+      if (!_isLiked) {
         widget.news.likes++;
+        _isLiked = true;
+      } else {
+        widget.news.likes--;
+        _isLiked = false;
       }
-      _isLiked = !_isLiked;
+      widget.onLikeUpdated();
     });
   }
 
@@ -30,7 +38,7 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('News Detail'),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -59,7 +67,9 @@ class _DetailPageState extends State<DetailPage> {
                 errorBuilder: (context, error, stackTrace) {
                   return Container(
                     color: Colors.grey[300],
-                    child: const Center(child: Icon(Icons.error, size: 40)),
+                    child: const Center(
+                      child: Icon(Icons.image_not_supported, size: 40),
+                    ),
                   );
                 },
               ),
